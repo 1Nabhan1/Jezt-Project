@@ -18,8 +18,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _AiPageState extends State<AiPage> {
   late GenerativeModel model;
-  final String apiKey =
-      'AIzaSyCIZvj4RL1XZMQZGmftNYDNSVZ-YOjr1Io';
+  final String apiKey = 'AIzaSyCIZvj4RL1XZMQZGmftNYDNSVZ-YOjr1Io';
   late TextEditingController messageController;
   List<Map<String, String>> messages = [];
   late ScrollController _scrollController;
@@ -56,7 +55,7 @@ class _AiPageState extends State<AiPage> {
 
   void _scrollListener() {
     if (_scrollController.offset >=
-        _scrollController.position.maxScrollExtent &&
+            _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       // When scrolled to the bottom, hide the scroll button
       setState(() {
@@ -110,11 +109,11 @@ class _AiPageState extends State<AiPage> {
 
     return Scaffold(
       backgroundColor:
-      themeProvider.darkModeEnabled ? Colors.grey.shade900 : Colors.white,
+          themeProvider.darkModeEnabled ? Colors.grey.shade900 : Colors.white,
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor:
-        themeProvider.darkModeEnabled ? Colors.black12 : Colors.white,
+            themeProvider.darkModeEnabled ? Colors.black12 : Colors.white,
         leading: GestureDetector(
             onTap: () {
               _scaffoldKey.currentState?.openDrawer();
@@ -122,7 +121,7 @@ class _AiPageState extends State<AiPage> {
             child: Icon(
               CupertinoIcons.arrow_2_squarepath,
               color:
-              themeProvider.darkModeEnabled ? Colors.white : Colors.black,
+                  themeProvider.darkModeEnabled ? Colors.white : Colors.black,
             )),
         title: ShaderMask(
           shaderCallback: (Rect bounds) {
@@ -149,7 +148,7 @@ class _AiPageState extends State<AiPage> {
             child: Icon(
               Icons.open_in_new,
               color:
-              themeProvider.darkModeEnabled ? Colors.white : Colors.black,
+                  themeProvider.darkModeEnabled ? Colors.white : Colors.black,
             ),
           ),
           SizedBox(
@@ -161,13 +160,17 @@ class _AiPageState extends State<AiPage> {
         ontap: () {
           clearMessages();
           _scaffoldKey.currentState?.closeDrawer();
-        }, sendMessage: sendMessage,
+        },
+        sendMessage: sendMessage,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ListView.builder(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ListView.builder(
+              scrollDirection: Axis.vertical,
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
               controller: _scrollController,
               reverse: false,
               itemCount: messages.length,
@@ -185,15 +188,15 @@ class _AiPageState extends State<AiPage> {
                       children: [
                         message['sender'] == 'user'
                             ? Icon(
-                          Icons.person,
-                          color: themeProvider.darkModeEnabled
-                              ? Colors.white
-                              : Colors.black,
-                        )
+                                Icons.person,
+                                color: themeProvider.darkModeEnabled
+                                    ? Colors.white
+                                    : Colors.black,
+                              )
                             : Image.asset(
-                          'assets/google-gemini-icon.png',
-                          width: 25,
-                        ),
+                                'assets/google-gemini-icon.png',
+                                width: 25,
+                              ),
                         SizedBox(
                           width: 10,
                         ),
@@ -212,70 +215,66 @@ class _AiPageState extends State<AiPage> {
                   ),
                 );
               },
-            ),
-          ),
-          if (_showScrollButton) // Show scroll button when new message arrives
-            IconButton(
-              icon: Icon(
-                Icons.arrow_downward,
-                color:
-                themeProvider.darkModeEnabled ? Colors.white : Colors.black,
-              ),
-              onPressed: scrollToBottom,
-            ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Expanded(
-              child: TextField(
-                style: TextStyle(
+            ),SizedBox(height: 30,),
+            if (_showScrollButton) // Show scroll button when new message arrives
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_downward,
                   color: themeProvider.darkModeEnabled
                       ? Colors.white
                       : Colors.black,
                 ),
-                controller: messageController,
-                onChanged: (text) {
-                  setState(() {});
-                },
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(30)),
-                  fillColor: themeProvider.darkModeEnabled
-                      ? Colors.grey.shade800
-                      : Colors.grey,
-                  filled: true,
-                  suffixIcon: Visibility(
-                    visible: messageController.text.isNotEmpty,
-                    child: IconButton(
-                        onPressed: () {
-                          String message = messageController.text.trim();
-                          if (message.isNotEmpty) {
-                            sendMessage(message);
-                            messageController.clear();
-                          }
-                        },
-                        icon: Icon(
-                          Icons.send,
-                          color: themeProvider.darkModeEnabled
-                              ? Colors.blueGrey
-                              : Colors.black,
-                        )),
-                  ),
-                  hintText: 'Enter a prompt here',
-                  hintStyle: TextStyle(
-                      color: themeProvider.darkModeEnabled
-                          ? Colors.white
-                          : Colors.black,
-                      fontWeight: FontWeight.w400),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
+                onPressed: scrollToBottom,
               ),
+          ],
+        ),
+      ),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          style: TextStyle(
+            color: themeProvider.darkModeEnabled ? Colors.white : Colors.black,
+          ),
+          controller: messageController,
+          onChanged: (text) {
+            setState(() {});
+          },
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(30)),
+            fillColor: themeProvider.darkModeEnabled
+                ? Colors.grey.shade800
+                : Colors.grey,
+            filled: true,
+            suffixIcon: Visibility(
+              visible: messageController.text.isNotEmpty,
+              child: IconButton(
+                  onPressed: () {
+                    String message = messageController.text.trim();
+                    if (message.isNotEmpty) {
+                      sendMessage(message);
+                      messageController.clear();
+                    }
+                  },
+                  icon: Icon(
+                    Icons.send,
+                    color: themeProvider.darkModeEnabled
+                        ? Colors.blueGrey
+                        : Colors.black,
+                  )),
+            ),
+            hintText: 'Enter a prompt here',
+            hintStyle: TextStyle(
+                color:
+                    themeProvider.darkModeEnabled ? Colors.white : Colors.black,
+                fontWeight: FontWeight.w400),
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(30),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
