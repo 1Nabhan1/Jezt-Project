@@ -22,7 +22,6 @@ class _AiPageState extends State<AiPage> {
   late TextEditingController messageController;
   List<Map<String, String>> messages = [];
   late ScrollController _scrollController;
-  bool _showScrollButton = false;
 
   bool _welcomeMessageDisplayed = false;
 
@@ -58,9 +57,6 @@ class _AiPageState extends State<AiPage> {
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       // When scrolled to the bottom, hide the scroll button
-      setState(() {
-        _showScrollButton = false;
-      });
     }
   }
 
@@ -75,7 +71,6 @@ class _AiPageState extends State<AiPage> {
     setState(() {
       messages
           .add({'sender': 'AI', 'message': response.text!}); // Add AI response
-      _showScrollButton = true; // Show scroll button when new message arrives
     });
 
     // Scroll to the bottom of the list when a new message is added
@@ -92,9 +87,6 @@ class _AiPageState extends State<AiPage> {
       duration: Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
-    setState(() {
-      _showScrollButton = false; // Hide the scroll button after scrolling
-    });
   }
 
   void clearMessages() {
@@ -108,174 +100,176 @@ class _AiPageState extends State<AiPage> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor:
-          themeProvider.darkModeEnabled ? Colors.grey.shade900 : Colors.white,
-      key: _scaffoldKey,
-      appBar: AppBar(
         backgroundColor:
-            themeProvider.darkModeEnabled ? Colors.black12 : Colors.white,
-        leading: GestureDetector(
-            onTap: () {
-              _scaffoldKey.currentState?.openDrawer();
+            themeProvider.darkModeEnabled ? Colors.grey.shade900 : Colors.white,
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor:
+              themeProvider.darkModeEnabled ? Colors.black12 : Colors.white,
+          leading: GestureDetector(
+              onTap: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+              child: Icon(
+                CupertinoIcons.arrow_2_squarepath,
+                color:
+                    themeProvider.darkModeEnabled ? Colors.white : Colors.black,
+              )),
+          title: ShaderMask(
+            shaderCallback: (Rect bounds) {
+              return LinearGradient(
+                colors: [Colors.blue, Colors.pink],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ).createShader(bounds);
             },
-            child: Icon(
-              CupertinoIcons.arrow_2_squarepath,
-              color:
-                  themeProvider.darkModeEnabled ? Colors.white : Colors.black,
-            )),
-        title: ShaderMask(
-          shaderCallback: (Rect bounds) {
-            return LinearGradient(
-              colors: [Colors.blue, Colors.pink],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ).createShader(bounds);
-          },
-          child: Text(
-            'Gemini',
-            style: TextStyle(
-              fontSize: 27,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+            child: Text(
+              'Gemini',
+              style: TextStyle(
+                fontSize: 27,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                clearMessages();
+              },
+              child: Icon(
+                Icons.open_in_new,
+                color:
+                    themeProvider.darkModeEnabled ? Colors.white : Colors.black,
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            )
+          ],
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              clearMessages();
-            },
-            child: Icon(
-              Icons.open_in_new,
-              color:
-                  themeProvider.darkModeEnabled ? Colors.white : Colors.black,
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          )
-        ],
-      ),
-      drawer: CustomDrawer(
-        ontap: () {
-          clearMessages();
-          _scaffoldKey.currentState?.closeDrawer();
-        },
-        sendMessage: sendMessage,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ListView.builder(
-              scrollDirection: Axis.vertical,
-              physics: BouncingScrollPhysics(),
-              shrinkWrap: true,
-              controller: _scrollController,
-              reverse: false,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[index];
-                return ListTile(
-                  title: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        message['sender'] == 'user'
-                            ? Icon(
-                                Icons.person,
+        drawer: CustomDrawer(
+          ontap: () {
+            clearMessages();
+            _scaffoldKey.currentState?.closeDrawer();
+          },
+          sendMessage: sendMessage,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ListView.builder(
+                scrollDirection: Axis.vertical,
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                controller: _scrollController,
+                reverse: false,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final message = messages[index];
+                  return ListTile(
+                    title: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          message['sender'] == 'user'
+                              ? Icon(
+                                  Icons.person,
+                                  color: themeProvider.darkModeEnabled
+                                      ? Colors.white
+                                      : Colors.black,
+                                )
+                              : Image.asset(
+                                  'assets/google-gemini-icon.png',
+                                  width: 25,
+                                ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: Text(
+                              message['message']!,
+                              style: TextStyle(
                                 color: themeProvider.darkModeEnabled
                                     ? Colors.white
                                     : Colors.black,
-                              )
-                            : Image.asset(
-                                'assets/google-gemini-icon.png',
-                                width: 25,
                               ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          child: Text(
-                            message['message']!,
-                            style: TextStyle(
-                              color: themeProvider.darkModeEnabled
-                                  ? Colors.white
-                                  : Colors.black,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),SizedBox(height: 30,),
-            if (_showScrollButton) // Show scroll button when new message arrives
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_downward,
+                  );
+                },
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        bottomSheet: BottomSheet(
+          backgroundColor:
+              themeProvider.darkModeEnabled ? Colors.black87 : Colors.white,
+          onClosing: () {},
+          builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                style: TextStyle(
                   color: themeProvider.darkModeEnabled
                       ? Colors.white
                       : Colors.black,
                 ),
-                onPressed: scrollToBottom,
+                controller: messageController,
+                onChanged: (text) {
+                  setState(() {});
+                },
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(30)),
+                  fillColor: themeProvider.darkModeEnabled
+                      ? Colors.grey.shade800
+                      : Colors.grey,
+                  filled: true,
+                  suffixIcon: Visibility(
+                    visible: messageController.text.isNotEmpty,
+                    child: IconButton(
+                        onPressed: () {
+                          String message = messageController.text.trim();
+                          if (message.isNotEmpty) {
+                            sendMessage(message);
+                            messageController.clear();
+                          }
+                        },
+                        icon: Icon(
+                          Icons.send,
+                          color: themeProvider.darkModeEnabled
+                              ? Colors.blueGrey
+                              : Colors.black,
+                        )),
+                  ),
+                  hintText: 'Enter a prompt here',
+                  hintStyle: TextStyle(
+                      color: themeProvider.darkModeEnabled
+                          ? Colors.white
+                          : Colors.black,
+                      fontWeight: FontWeight.w400),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
               ),
-          ],
-        ),
-      ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextField(
-          style: TextStyle(
-            color: themeProvider.darkModeEnabled ? Colors.white : Colors.black,
-          ),
-          controller: messageController,
-          onChanged: (text) {
-            setState(() {});
+            );
           },
-          decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(30)),
-            fillColor: themeProvider.darkModeEnabled
-                ? Colors.grey.shade800
-                : Colors.grey,
-            filled: true,
-            suffixIcon: Visibility(
-              visible: messageController.text.isNotEmpty,
-              child: IconButton(
-                  onPressed: () {
-                    String message = messageController.text.trim();
-                    if (message.isNotEmpty) {
-                      sendMessage(message);
-                      messageController.clear();
-                    }
-                  },
-                  icon: Icon(
-                    Icons.send,
-                    color: themeProvider.darkModeEnabled
-                        ? Colors.blueGrey
-                        : Colors.black,
-                  )),
-            ),
-            hintText: 'Enter a prompt here',
-            hintStyle: TextStyle(
-                color:
-                    themeProvider.darkModeEnabled ? Colors.white : Colors.black,
-                fontWeight: FontWeight.w400),
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ),
-      ),
-    );
+        ));
   }
 }
