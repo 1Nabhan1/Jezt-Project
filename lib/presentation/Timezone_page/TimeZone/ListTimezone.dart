@@ -14,7 +14,11 @@ class Timezonelist extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.greenAccent,
-        leading: Icon(CupertinoIcons.back),
+        leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Icon(Icons.arrow_back_ios_new)),
         title: Text(
           'Select a Timezone',
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -26,9 +30,7 @@ class Timezonelist extends StatelessWidget {
             Obx(
               () {
                 if (timezoneController.loading.value) {
-                  return Column(children: [
-                    CircularProgressIndicator(),
-                  ]);
+                  return Center(child: CircularProgressIndicator());
                 } else if (timezoneController.error.value.isNotEmpty) {
                   return Column(
                     children: [

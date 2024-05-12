@@ -46,7 +46,7 @@ class _TimeZoneDetailPageState extends State<TimeZoneDetailPage> {
         backgroundColor: Colors.greenAccent,
         leading: GestureDetector(
           onTap: Get.back,
-          child: Icon(CupertinoIcons.back),
+          child: Icon(Icons.arrow_back_ios_new),
         ),
         title: Text('Time Zone Details'),
       ),

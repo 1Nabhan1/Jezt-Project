@@ -47,7 +47,7 @@ class Home_page extends StatelessWidget {
                             style: GoogleFonts.alice(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey.shade300,
-                                fontSize: 50),
+                                fontSize: 45),
                           ),
                         ),
                       ]),

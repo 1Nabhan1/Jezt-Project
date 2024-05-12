@@ -44,10 +44,10 @@ class BuildSearchAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final WeatherController weatherController = Get.put(WeatherController());
     return AppBar(
-      backgroundColor: Colors.transparent.withOpacity(.5),
+      backgroundColor: Colors.transparent,
       title: TextField(
         autofocus: true,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
         controller: weatherController.cityController,
         inputFormatters: [
           FilteringTextInputFormatter.deny(RegExp(r"\s")), // Deny whitespace
@@ -76,7 +76,7 @@ class BuildSearchAppBar extends StatelessWidget {
             onPressed: weatherController.getWeather,
             icon: Icon(
               Icons.send_outlined,
-              color: Colors.blueGrey,
+              color: Colors.orange,
             ))
       ],
     );
