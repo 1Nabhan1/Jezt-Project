@@ -9,7 +9,6 @@ import 'package:jzt_mt_project/presentation/Splash_screen/Splash_screen.dart';
 import 'package:jzt_mt_project/presentation/Splash_screen/controller/Splash_controller.dart';
 import 'package:jzt_mt_project/presentation/Timezone_page/TimeZone/ListTimezone.dart';
 import 'package:jzt_mt_project/routes/App_pages.dart';
-import 'package:jzt_mt_project/tst.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/Theme_provider/Gemini_theme(provider).dart';
