@@ -24,7 +24,7 @@ class NewsCOntroller extends GetxController {
       datas.assignAll(fetchedProducts);
     } catch (e) {
       print('Error fetching latest news: $e');
-      error.value = 'Failed to fetch latest news';
+      error.value = 'Failed to Load';
     } finally {
       loading.value = false;
     }

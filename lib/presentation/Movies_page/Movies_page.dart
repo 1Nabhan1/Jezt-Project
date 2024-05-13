@@ -108,22 +108,39 @@ class Movies_page extends StatelessWidget {
             Obx(
               () {
                 if (moviesController.loading.value) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return Column(children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .3,
+                    ),
+                    CircularProgressIndicator(),
+                  ]);
                 } else if (moviesController.error.value.isNotEmpty) {
                   return Column(
                     children: [
-                      Text(
-                        ' ${moviesController.error.value}',
-                        style: TextStyle(fontSize: 20),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .3,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          ' ${moviesController.error.value}',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          backgroundColor: Colors.red,
+                        ),
                         onPressed: () async {
                           await moviesController
                               .fetchProductsFromApiFetchData();
                         },
-                        child: Text('Retry'),
+                        child: Text(
+                          'Retry',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
                   );
@@ -175,7 +192,8 @@ class Movies_page extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
                                       child: Text(
                                         datas.title ?? '',
                                         style: TextStyle(

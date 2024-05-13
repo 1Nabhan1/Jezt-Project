@@ -23,7 +23,7 @@ class _AiPageState extends State<AiPage> {
   List<Map<String, String>> messages = [];
   late ScrollController _scrollController;
 
-  bool _welcomeMessageDisplayed = false;
+  bool welcomeMessageDisplayed = false;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _AiPageState extends State<AiPage> {
         'sender': 'AI',
         'message': 'Hai, how can I help you today?',
       });
-      _welcomeMessageDisplayed = true;
+      welcomeMessageDisplayed = true;
     });
   }
 

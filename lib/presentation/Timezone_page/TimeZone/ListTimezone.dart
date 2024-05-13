@@ -30,19 +30,48 @@ class Timezonelist extends StatelessWidget {
             Obx(
               () {
                 if (timezoneController.loading.value) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (timezoneController.error.value.isNotEmpty) {
-                  return Column(
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        ' ${timezoneController.error.value}',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          timezoneController.fetchedTimeZones();
-                        },
-                        child: Text('Retry'),
+                      Column(children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .3,
+                        ),
+                        CircularProgressIndicator()
+                      ]),
+                    ],
+                  );
+                } else if (timezoneController.error.value.isNotEmpty) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .3,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            child: Text(
+                              ' ${timezoneController.error.value}',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              backgroundColor: Colors.greenAccent,
+                            ),
+                            onPressed: () async {
+                              timezoneController.fetchedTimeZones();
+                            },
+                            child: Text(
+                              'Retry',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   );

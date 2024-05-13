@@ -60,10 +60,10 @@ class NewsPage extends StatelessWidget {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                                 borderSide:
-                                BorderSide(color: Colors.black, width: 2)),
+                                    BorderSide(color: Colors.black, width: 2)),
                             focusedBorder: OutlineInputBorder(
                                 borderSide:
-                                BorderSide(color: Colors.black, width: 2),
+                                    BorderSide(color: Colors.black, width: 2),
                                 borderRadius: BorderRadius.circular(5))),
                       ),
                     ),
@@ -90,23 +90,40 @@ class NewsPage extends StatelessWidget {
               height: 20,
             ),
             Obx(
-                  () {
+              () {
                 if (newsController.loading.value) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return Column(children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .3,
+                    ),
+                    CircularProgressIndicator(),
+                  ]);
                 } else if (newsController.error.value.isNotEmpty) {
                   return Column(
                     children: [
-                      Text(
-                        ' ${newsController.error.value}',
-                        style: TextStyle(fontSize: 20),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .3,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          ' ${newsController.error.value}',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          backgroundColor: Colors.green,
+                        ),
                         onPressed: () async {
                           await newsController.fetchProductsFromApiFetchData();
                         },
-                        child: Text('Retry'),
+                        child: Text(
+                          'Retry',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
                   );
@@ -154,7 +171,8 @@ class NewsPage extends StatelessWidget {
                                 SizedBox(width: 20),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         datas.title ?? '',
